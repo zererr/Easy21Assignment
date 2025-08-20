@@ -417,9 +417,9 @@ def Sarsa_λ_Tabular_Experiment(lambdas, n_episodes, Q_star):
     MSEs = np.zeros((n_episodes, len(lambdas))) # For plotting learning curves of \lambda = 0 and 1
     envs = []    
 
-    for i, λ in enumerate(lambdas):
-        env.λ = λ
+    for i, λ in enumerate(lambdas):        
         env = Easy_21_Environment(discount = 1, N_0 = 100) # Remember to initialize an env for other learning algorithms
+        env.λ = λ
 
         # Training loop
         for j in tqdm(range(n_episodes)):
@@ -437,7 +437,7 @@ def Sarsa_λ_Tabular_Experiment(lambdas, n_episodes, Q_star):
     plot_MSE_against_lambda(lambdas, final_MSEs,
                             title = r'MSE between $Q^*$ and Q learned from Tabular Sarsa $\lambda$ after ' + f'{n_episodes} episodes')    
     for env in envs:
-        plot_policy(env.policy, title = f"Policy Visualization \lambda = {env.λ}")
+        plot_policy(env.policy, title = f"Policy Visualization $\lambda$ = {round(env.λ, 2)}")
 
     return envs
 
@@ -445,9 +445,9 @@ def Sarsa_λ_FA_Experiment(lambdas, n_episodes, Q_star):
     MSEs = np.zeros((n_episodes, len(lambdas))) # For plotting learning curves of \lambda = 0 and 1
     envs = []
 
-    for i, λ in enumerate(lambdas):
-        env.λ = λ
+    for i, λ in enumerate(lambdas):        
         env = Easy_21_Environment(discount = 1, N_0 = None) # Remember to initialize an env for other learning algorithms
+        env.λ = λ
         env.weights = np.zeros(36) # 6 x 3 x 2 features, which forms a feature vector that is dot product with this weights vector
         env.Q = linear_FA_constructor(feature_vector, env.weights)
 
@@ -468,7 +468,7 @@ def Sarsa_λ_FA_Experiment(lambdas, n_episodes, Q_star):
     plot_MSE_against_lambda(lambdas, final_MSEs,
                             title = r'MSE between $Q^*$ and Q learned from FA Sarsa $\lambda$ after ' + f'{n_episodes} episodes')
     for env in envs:
-        plot_policy(env.policy, title = f"Policy Visualization \lambda = {env.λ}")
+        plot_policy(env.policy, title = f"Policy Visualization $\lambda$ = {round(env.λ, 2)}")
 
     return envs
 
@@ -480,10 +480,10 @@ if __name__ == '__main__':
     lambdas = np.arange(0, 1.1, 0.1)
 
     # Choose experiment
-    env = MC_Experiment(n_episodes)
+    # env = MC_Experiment(n_episodes)
     
     # envs = Sarsa_λ_FA_Experiment(lambdas, n_episodes, Optimal_Agent.Q)
 
-    # envs = Sarsa_λ_Tabular_Experiment(lambdas, n_episodes, Optimal_Agent.Q)
+    envs = Sarsa_λ_Tabular_Experiment(lambdas, n_episodes, Optimal_Agent.Q)
     
     
